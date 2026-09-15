@@ -1,0 +1,32 @@
+name: Project proposal
+description: Suggest a project for the collaboration board
+labels: [collaboration]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: What would "done" look like?
+    validations:
+      required: true
+  - type: input
+    id: skills
+    attributes:
+      label: Skills needed
+      placeholder: Playwright, TypeScript, technical writing
+  - type: dropdown
+    id: effort
+    attributes:
+      label: Rough effort
+      options: [a few hours, a few days, ongoing]
+  - type: checkboxes
+    id: lead
+    attributes:
+      label: Leading
+      options:
+        - label: I can lead this project

@@ -1,0 +1,24 @@
+---
+title: "Type a field name, get a locator"
+summary: "Papio Selector now finds elements from the name you type, and shows locators for several frameworks at once."
+date: 2026-09-08
+authors: [srikanth]
+tags: [papio-selector, locators, chrome-extension]
+---
+
+Writing a locator usually starts the same way: open DevTools, find the element, inspect its attributes, then decide what to build the selector from. For a form with twenty fields, that loop gets old fast.
+
+## The new flow
+
+With the latest [Papio Selector](/tools/papio-selector), you skip the inspection step. Type the name of the field you're after, and the extension shows the matching locator.
+
+## Several frameworks side by side
+
+Results are shown for multiple frameworks together. That helps in two situations:
+
+- **Migrations.** Teams moving from one framework to another can see equivalent locators without translating by hand.
+- **Mixed stacks.** When different teams use different tools against the same app, everyone gets a locator in the syntax they need.
+
+## Try it and tell us what breaks
+
+Field names are messy in real apps. If a name you type doesn't resolve to the element you expected, open an issue from the [tool page](/tools/papio-selector) with the page structure so we can improve matching.

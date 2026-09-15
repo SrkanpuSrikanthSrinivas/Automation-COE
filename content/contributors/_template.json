@@ -1,0 +1,10 @@
+{
+  "name": "Your Name",
+  "role": "Your role",
+  "location": "City, Region",
+  "bio": "Under 280 characters.",
+  "skills": ["Skill one", "Skill two"],
+  "github": "https://github.com/your-handle",
+  "linkedin": "https://www.linkedin.com/in/your-handle",
+  "openTo": ["mentoring"]
+}
