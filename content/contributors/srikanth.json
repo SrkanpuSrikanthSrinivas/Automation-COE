@@ -2,7 +2,20 @@
   "name": "Srikanth",
   "role": "Software Engineer Architect, Caesars Digital",
   "location": "McKinney, TX",
-  "bio": "Founder of AIQEAcademy with 20+ years in test automation and QA architecture. Builds open-source tools for web and mobile automation, agentic AI, and identity and access management.",
-  "skills": ["QA architecture", "Playwright", "Appium", "Agentic AI", "MCP", "Chrome extensions", "IAM"],
-  "openTo": ["mentoring", "speaking", "reviewing", "co-authoring"]
+  "bio": "Software engineer architect with 20+ years in test automation and QA architecture. Builds open-source tools for web and mobile automation, agentic AI, and identity and access management.",
+  "skills": [
+    "QA architecture",
+    "Playwright",
+    "Appium",
+    "Agentic AI",
+    "MCP",
+    "Chrome extensions",
+    "IAM"
+  ],
+  "openTo": [
+    "mentoring",
+    "speaking",
+    "reviewing",
+    "co-authoring"
+  ]
 }

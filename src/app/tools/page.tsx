@@ -23,7 +23,7 @@ export default function ToolsPage() {
     <Container>
       <PageHeader
         title="Tools"
-        intro="Open-source tools for web, mobile, AI-assisted, and security testing. Each one has a named maintainer and takes contributions."
+        intro="Open-source tools for web, mobile, and AI-assisted testing. Each one has a named maintainer and takes contributions."
       />
       <ToolFilter tools={tools} categories={toolCategories} />
     </Container>

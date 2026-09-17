@@ -37,13 +37,6 @@ export const site = {
   description:
     "A Center of Excellence for test automation: open-source tools, practical guides, and a community that builds them together.",
   url: resolveSiteUrl(),
-  repo: "https://github.com/your-org/test-automation-coe",
-  // Where contributors discuss ideas before opening a pull request.
-  discussions: "https://github.com/your-org/test-automation-coe/discussions",
-  social: {
-    github: "https://github.com/your-org",
-    linkedin: "https://www.linkedin.com/company/your-org",
-  },
   nav: [
     { href: "/tools", label: "Tools" },
     { href: "/blog", label: "Blog" },
@@ -58,7 +51,6 @@ export const toolCategories = [
   "Web automation",
   "Mobile automation",
   "AI for testing",
-  "Security",
   "Developer productivity",
 ] as const;
 

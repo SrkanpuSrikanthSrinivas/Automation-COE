@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { site } from "@/config/site";
+import { askLabel, askUrl, editUrl } from "@/lib/repo";
 import { getContributor, getPost, getPosts, formatDate, type Contributor } from "@/lib/content";
 import { Container } from "@/components/container";
 import { Mdx } from "@/components/mdx";
@@ -35,6 +35,7 @@ export default async function PostPage({ params }: Props) {
   const posts = getPosts();
   const i = posts.findIndex((p) => p.slug === slug);
   const newer = posts[i - 1];
+  const edit = editUrl(`content/blog/${post.slug}.mdx`);
   const older = posts[i + 1];
 
   return (
@@ -63,17 +64,23 @@ export default async function PostPage({ params }: Props) {
           </div>
         )}
 
-        <p className="mt-8 text-sm text-muted">
-          Spotted a mistake?{" "}
-          <a href={`${site.repo}/edit/main/content/blog/${post.slug}.mdx`} className="font-medium text-signal hover:underline">
-            Suggest an edit
-          </a>{" "}
-          or{" "}
-          <a href={site.discussions} className="font-medium text-signal hover:underline">
-            discuss this post
-          </a>
-          .
-        </p>
+        {edit && (
+          <p className="mt-8 text-sm text-muted">
+            Spotted a mistake?{" "}
+            <a href={edit} target="_blank" rel="noreferrer" className="font-medium text-signal hover:underline">
+              Suggest an edit on GitHub
+            </a>
+            {askUrl && (
+              <>
+                {" "}or{" "}
+                <a href={askUrl} target="_blank" rel="noreferrer" className="font-medium text-signal hover:underline">
+                  {askLabel.toLowerCase()}
+                </a>
+              </>
+            )}
+            .
+          </p>
+        )}
 
         <nav aria-label="More posts" className="mt-12 grid gap-4 border-t border-line pt-8 sm:grid-cols-2">
           {older ? (

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { site } from "@/config/site";
+import { askLabel, askUrl, fileUrl, repoUrl } from "@/lib/repo";
+import { getContributionTypes } from "@/lib/contribution-templates";
 import { Container } from "@/components/container";
 import { ButtonLink, PageHeader } from "@/components/ui";
+import { CopyButton } from "@/components/copy-button";
 
 export const metadata: Metadata = {
   title: "Contribute",
@@ -10,110 +12,53 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  { title: "Fork the repository", body: "Or use the “Edit on GitHub” link on any page to have GitHub fork it for you." },
-  { title: "Add or edit a file in /content", body: "Posts, tools, profiles, and projects are plain Markdown or JSON. Templates are below." },
-  { title: "Open a pull request", body: "The PR template has a short checklist. Link any related issue." },
+  {
+    title: "Pick what to add",
+    body: "Choose a post, tool, profile, or project below and select its GitHub button. The editor opens with a template filled in.",
+  },
+  {
+    title: "Fill in the template",
+    body: "Rename the file, replace the example values, and write your content. Sign in to GitHub if asked.",
+  },
+  {
+    title: "Propose the change",
+    body: "Select “Commit changes”. If you aren’t a member, GitHub creates a fork for you and opens a pull request.",
+  },
   {
     title: "Check your preview",
-    body: "Vercel builds a preview of the whole site for every PR. If a field is missing or a name is misspelled, the build fails and tells you which line.",
-  },
-  { title: "Get a review and merge", body: "A maintainer reviews within a few days. Once merged, the live site updates in about a minute." },
-];
-
-const templates = [
-  {
-    id: "write-a-post",
-    title: "Write a post",
-    file: "content/blog/your-post-slug.mdx",
-    body: "Share something you learned on a real project. Tutorials, post-mortems, and framework comparisons all work. Your author name must match a profile file.",
-    code: `---
-title: "Stabilising flaky Playwright tests in CI"
-summary: "Three changes that took our retry rate from 9% to under 1%."
-date: 2026-09-15
-authors: [your-github-handle]
-tags: [playwright, ci, flakiness]
----
-
-Start with the problem you had.
-
-<Callout>Use callouts for warnings or key takeaways.</Callout>`,
+    body: "Vercel builds a preview of the whole site for your pull request. If a field is wrong, the build log names the file and line.",
   },
   {
-    id: "add-a-tool",
-    title: "Add a tool",
-    file: "content/tools/tool-slug.mdx",
-    body: "Showcase an open-source tool you maintain. Category must be one of the categories on the Tools page.",
-    code: `---
-name: "My Tool"
-tagline: "One sentence on what it does for a tester."
-category: "Web automation"
-status: beta            # stable | beta | experimental
-platforms: [Chrome, Playwright]
-install: "npm install my-tool"
-repo: "https://github.com/you/my-tool"
-maintainers: [your-github-handle]
-featured: false
----
-
-## What it does
-## Getting started
-## How to contribute`,
-  },
-  {
-    id: "add-your-profile",
-    title: "Add your profile",
-    file: "content/contributors/your-github-handle.json",
-    body: "Your file name becomes your profile URL. Use “openTo” to tell people how they can work with you.",
-    code: `{
-  "name": "Your Name",
-  "role": "SDET, Payments team",
-  "location": "Dallas, TX",
-  "bio": "What you work on and what you want to learn next.",
-  "skills": ["Playwright", "API testing", "CI/CD"],
-  "github": "https://github.com/your-handle",
-  "linkedin": "https://www.linkedin.com/in/your-handle",
-  "openTo": ["mentoring", "reviewing"]
-}`,
-  },
-  {
-    id: "propose-a-project",
-    title: "Propose a project",
-    file: "content/collaborate/project-slug.md",
-    body: "Start with an issue so people can discuss it. Once someone agrees to lead it, add it to the board.",
-    code: `---
-title: "Add iOS examples to mobile-automation-mcp"
-summary: "Sample flows for XCUITest so new users can start in minutes."
-status: looking for help   # looking for help | in progress | done
-skills: [Appium, iOS, Python]
-lead: your-github-handle
-effort: a few days          # a few hours | a few days | ongoing
-tool: mobile-automation-mcp # optional, a tool slug
-issue: "https://github.com/your-org/repo/issues/12"
-opened: 2026-09-15
----`,
+    title: "Get a review and merge",
+    body: "A maintainer reviews within a few days. After the merge, the live site updates in about a minute.",
   },
 ];
 
 export default function ContributePage() {
+  const types = getContributionTypes();
   return (
     <Container>
       <PageHeader
         title="Contribute"
-        intro="Everything on this site is a file in a public repository. If you can open a pull request, you can publish a post, showcase a tool, or start a project."
+        intro="Everything on this site is a file in a public repository. If you have a GitHub account, you can publish a post, showcase a tool, or start a project, all from your browser."
       >
-        <div className="flex flex-wrap gap-3">
-          <ButtonLink href={site.repo}>Open the repository</ButtonLink>
-          <ButtonLink href={site.discussions} variant="secondary">
-            Ask a question first
-          </ButtonLink>
-        </div>
+        {repoUrl && (
+          <div className="flex flex-wrap gap-3">
+            <ButtonLink href={repoUrl}>Open the repository</ButtonLink>
+            {askUrl && (
+              <ButtonLink href={askUrl} variant="secondary">
+                {askLabel}
+              </ButtonLink>
+            )}
+          </div>
+        )}
       </PageHeader>
 
       <section className="py-14">
         <h2 className="h-section">How a contribution goes live</h2>
         <ol className="mt-8 grid gap-6 md:grid-cols-5">
           {steps.map((s, i) => (
-            <li key={s.title} className="relative border-t-2 border-line pt-4 first:border-signal">
+            <li key={s.title} className="border-t-2 border-line pt-4 first:border-signal">
               <span className="text-sm font-semibold text-signal">Step {i + 1}</span>
               <h3 className="mt-1 font-semibold">{s.title}</h3>
               <p className="mt-1.5 text-[15px] text-muted">{s.body}</p>
@@ -125,28 +70,65 @@ export default function ContributePage() {
       <section className="border-t border-line py-14">
         <h2 className="h-section">Pick what you want to add</h2>
         <nav aria-label="Contribution types" className="mt-4 flex flex-wrap gap-2">
-          {templates.map((t) => (
-            <Link key={t.id} href={`#${t.id}`} className="rounded-full border border-line px-3.5 py-1.5 text-[15px] hover:border-signal hover:text-signal">
+          {types.map((t) => (
+            <Link
+              key={t.id}
+              href={`#${t.id}`}
+              className="rounded-full border border-line px-3.5 py-1.5 text-[15px] hover:border-signal hover:text-signal"
+            >
               {t.title}
             </Link>
           ))}
         </nav>
 
-        <div className="mt-10 space-y-14">
-          {templates.map((t) => (
-            <article key={t.id} id={t.id} className="grid scroll-mt-24 gap-6 lg:grid-cols-[1fr_1.4fr]">
-              <div>
-                <h3 className="text-xl font-semibold">{t.title}</h3>
-                <p className="mt-2 text-muted">{t.body}</p>
-                <p className="mt-4 text-sm">
-                  Create <code className="rounded bg-signal/10 px-1.5 py-0.5 font-mono text-[13px]">{t.file}</code>
-                </p>
-              </div>
-              <pre className="overflow-x-auto rounded-xl bg-code-bg p-5 font-mono text-[13px] leading-relaxed text-code-ink">
-                <code>{t.code}</code>
-              </pre>
-            </article>
-          ))}
+        <div className="mt-10 space-y-16">
+          {types.map((t) => {
+            const example = fileUrl(t.example);
+            return (
+              <article key={t.id} id={t.id} className="grid scroll-mt-24 gap-6 lg:grid-cols-[1fr_1.4fr]">
+                <div>
+                  <h3 className="text-xl font-semibold">{t.title}</h3>
+                  <p className="mt-2 text-muted">{t.body}</p>
+                  <div className="mt-6 flex flex-wrap items-center gap-3">
+                    {t.primary.href && <ButtonLink href={t.primary.href}>{t.primary.label}</ButtonLink>}
+                    {t.secondary?.href && (
+                      <ButtonLink href={t.secondary.href} variant="secondary">
+                        {t.secondary.label}
+                      </ButtonLink>
+                    )}
+                  </div>
+                  {example && (
+                    <a
+                      href={example}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-4 inline-block text-[15px] font-medium text-signal hover:underline underline-offset-4"
+                    >
+                      See an example on GitHub
+                    </a>
+                  )}
+                  {!repoUrl && (
+                    <p className="mt-4 text-sm text-muted">
+                      Copy the template and add it to <code className="font-mono text-[13px]">{t.folder}/</code> in a
+                      pull request.
+                    </p>
+                  )}
+                </div>
+
+                <figure className="overflow-hidden rounded-xl bg-code-bg text-code-ink">
+                  <figcaption className="flex items-center justify-between gap-3 border-b border-white/10 py-2 pl-5 pr-2 font-mono text-[12.5px] text-code-ink/60">
+                    <span className="truncate">
+                      {t.folder}/{t.filename}
+                    </span>
+                    <CopyButton text={t.template} label="Copy template" />
+                  </figcaption>
+                  <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
+                    <code>{t.template}</code>
+                  </pre>
+                </figure>
+              </article>
+            );
+          })}
         </div>
       </section>
 

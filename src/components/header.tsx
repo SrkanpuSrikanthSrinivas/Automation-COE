@@ -5,6 +5,7 @@ import { Logo } from "./logo";
 import { ThemeToggle } from "./theme-toggle";
 import { NavLinks, MobileNav } from "./nav";
 import { GitHubIcon } from "./icons";
+import { repoUrl } from "@/lib/repo";
 
 export function Header() {
   return (
@@ -17,14 +18,18 @@ export function Header() {
           <NavLinks />
         </nav>
         <div className="ml-auto flex items-center gap-1">
-          <a
-            href={site.repo}
-            className="grid size-9 place-items-center rounded-md text-muted hover:bg-line/60 hover:text-ink"
-            aria-label="Source on GitHub"
-            title="Source on GitHub"
-          >
-            <GitHubIcon className="size-[18px]" />
-          </a>
+          {repoUrl && (
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="grid size-9 place-items-center rounded-md text-muted hover:bg-line/60 hover:text-ink"
+              aria-label="Source on GitHub"
+              title="Source on GitHub"
+            >
+              <GitHubIcon className="size-[18px]" />
+            </a>
+          )}
           <ThemeToggle />
           <MobileNav />
         </div>

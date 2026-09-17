@@ -16,13 +16,23 @@ npm run validate   # typecheck + production build, the same check CI runs
 
 ## Deploy to Vercel
 
-1. Push this folder to a GitHub repository.
-2. In Vercel, choose **Add New → Project** and import the repository. The Next.js preset is detected automatically; no build settings need changing.
-3. Add one environment variable: `NEXT_PUBLIC_SITE_URL` = your production URL (for example `https://coe.aiqeacademy.com`). It is used for the sitemap, RSS feed, and social previews.
-4. Deploy. Every pull request now gets its own preview URL, and merges to `main` go live automatically.
-5. Optional: add a custom domain under **Settings → Domains**.
+1. Push this folder to a **public** GitHub repository, with `package.json` at the repository root.
+2. In Vercel, choose **Add New → Project** and import the repository. The Next.js preset is detected automatically.
+3. Deploy. Every pull request gets its own preview URL, and merges to `main` go live automatically.
 
-After the first deploy, update `src/config/site.ts` with the real repository and discussion URLs.
+All GitHub links on the site (Contribute buttons, "Edit on GitHub", "Ask a question") are built from the repository Vercel is connected to, so nothing needs editing. If the site stops showing GitHub buttons, Vercel couldn't identify the repository; set `NEXT_PUBLIC_REPO_URL`.
+
+### Environment variables (all optional)
+
+| Variable | Example | When to set it |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | `https://automation-coe.vercel.app` | Once you have a custom domain. Otherwise Vercel's production domain is used. |
+| `NEXT_PUBLIC_REPO_URL` | `https://github.com/owner/repo` | Deploying from the Vercel CLI or anywhere other than a Git-connected Vercel project. |
+| `NEXT_PUBLIC_REPO_BRANCH` | `main` | Your default branch isn't `main`. |
+| `NEXT_PUBLIC_REPO_DIR` | `website` | The site lives in a subfolder of the repository. |
+| `NEXT_PUBLIC_DISCUSSIONS` | `true` | After turning on GitHub Discussions (repo **Settings → General → Features**). Until then, "Ask a question" opens a Question issue. |
+
+Redeploy after changing any of these; they are read at build time.
 
 ## Where things live
 

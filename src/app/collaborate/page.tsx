@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { site } from "@/config/site";
+import { issueUrl } from "@/lib/repo";
 import { getCollabItems, getContributor, getTool, formatDate, type CollabItem } from "@/lib/content";
 import { Container } from "@/components/container";
 import { ButtonLink, PageHeader, Tag } from "@/components/ui";
@@ -19,7 +19,7 @@ const columns: { status: CollabItem["status"]; title: string; tone: "wait" | "pa
 
 export default function CollaboratePage() {
   const items = getCollabItems();
-  const proposeUrl = `${site.repo}/issues/new?template=project-proposal.yml`;
+  const proposeUrl = issueUrl("project-proposal.yml") ?? "/contribute#propose-a-project";
 
   return (
     <Container>

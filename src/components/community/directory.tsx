@@ -14,7 +14,7 @@ const openToLabels: Record<string, string> = {
   "co-authoring": "Co-authoring",
 };
 
-export function Directory({ people }: { people: Contributor[] }) {
+export function Directory({ people, addProfileHref }: { people: Contributor[]; addProfileHref: string }) {
   const [skill, setSkill] = useState("");
   const [openTo, setOpenTo] = useState("");
 
@@ -84,11 +84,12 @@ export function Directory({ people }: { people: Contributor[] }) {
         ))}
         <li>
           <Link
-            href="/contribute#add-your-profile"
+            href={addProfileHref}
+            {...(addProfileHref.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
             className="flex h-full min-h-48 flex-col justify-center rounded-xl border border-dashed border-line p-5 text-center hover:border-signal"
           >
             <span className="font-semibold">Add your profile</span>
-            <span className="mt-1 text-sm text-muted">One JSON file, one pull request.</span>
+            <span className="mt-1 text-sm text-muted">Opens a ready-made profile file on GitHub.</span>
           </Link>
         </li>
       </ul>

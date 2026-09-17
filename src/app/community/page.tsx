@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { site } from "@/config/site";
+import { askLabel, askUrl } from "@/lib/repo";
+import { getContribution } from "@/lib/contribution-templates";
 import { getContributors } from "@/lib/content";
 import { Container } from "@/components/container";
 import { ButtonLink, PageHeader } from "@/components/ui";
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function CommunityPage() {
+  const addProfile = getContribution("add-your-profile").primary.href ?? "/contribute#add-your-profile";
   return (
     <Container>
       <PageHeader
@@ -18,13 +20,18 @@ export default function CommunityPage() {
         intro="Find people to learn from, pair with, and build alongside. Filter by skill or by what someone is open to."
       >
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href={site.discussions}>Join the discussion</ButtonLink>
-          <ButtonLink href="/contribute#add-your-profile" variant="secondary">
-            Add your profile
+          <ButtonLink href={addProfile}>Add your profile</ButtonLink>
+          {askUrl && (
+            <ButtonLink href={askUrl} variant="secondary">
+              {askLabel}
+            </ButtonLink>
+          )}
+          <ButtonLink href="/contribute#add-your-profile" variant="quiet">
+            How profiles work
           </ButtonLink>
         </div>
       </PageHeader>
-      <Directory people={getContributors()} />
+      <Directory people={getContributors()} addProfileHref={addProfile} />
     </Container>
   );
 }

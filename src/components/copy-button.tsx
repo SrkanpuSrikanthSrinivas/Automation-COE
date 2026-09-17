@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function CopyButton({ text }: { text: string }) {
+export function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
   async function copy() {
     try {
@@ -17,7 +17,7 @@ export function CopyButton({ text }: { text: string }) {
       onClick={copy}
       className="rounded-md px-2.5 py-1 text-[13px] font-medium text-code-ink/70 hover:bg-white/10 hover:text-code-ink"
     >
-      <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
+      <span aria-live="polite">{copied ? "Copied" : label}</span>
     </button>
   );
 }

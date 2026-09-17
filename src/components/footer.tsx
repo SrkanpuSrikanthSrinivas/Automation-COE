@@ -2,14 +2,16 @@ import Link from "next/link";
 import { site } from "@/config/site";
 import { Container } from "./container";
 import { Logo } from "./logo";
+import { askLabel, askUrl, issueUrl, repoUrl } from "@/lib/repo";
 
-const groups = [
+type FooterLink = { href: string | null; label: string };
+
+const groups: { title: string; links: FooterLink[] }[] = [
   {
     title: "Explore",
     links: [
       { href: "/tools", label: "Tools" },
       { href: "/blog", label: "Blog" },
-      { href: "/blog/rss.xml", label: "RSS feed" },
     ],
   },
   {
@@ -17,15 +19,15 @@ const groups = [
     links: [
       { href: "/community", label: "Members" },
       { href: "/collaborate", label: "Open projects" },
-      { href: site.discussions, label: "Discussions" },
+      { href: askUrl, label: askLabel },
     ],
   },
   {
     title: "Contribute",
     links: [
       { href: "/contribute", label: "How to contribute" },
-      { href: `${site.repo}/issues/new/choose`, label: "Report an issue" },
-      { href: site.repo, label: "Source code" },
+      { href: issueUrl("site-bug.yml"), label: "Report a site problem" },
+      { href: repoUrl, label: "Source code" },
     ],
   },
 ];
@@ -44,13 +46,19 @@ export function Footer() {
           <div key={g.title}>
             <h2 className="text-sm font-semibold">{g.title}</h2>
             <ul className="mt-3 space-y-2 text-sm">
-              {g.links.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-muted hover:text-ink">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
+              {g.links
+                .filter((l): l is { href: string; label: string } => Boolean(l.href))
+                .map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
+                      className="text-muted hover:text-ink"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </div>
         ))}

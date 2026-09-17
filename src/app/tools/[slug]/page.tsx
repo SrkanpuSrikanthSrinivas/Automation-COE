@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { site } from "@/config/site";
+import { editUrl } from "@/lib/repo";
 import { getCollabItems, getContributor, getTool, getTools, type Contributor } from "@/lib/content";
 import { Container } from "@/components/container";
 import { ButtonLink, Tag, ToolStatus } from "@/components/ui";
@@ -29,6 +29,7 @@ export default async function ToolPage({ params }: Props) {
   if (!tool) notFound();
 
   const maintainers = tool.maintainers.map(getContributor).filter((c): c is Contributor => Boolean(c));
+  const edit = editUrl(`content/tools/${tool.slug}.mdx`);
   const projects = getCollabItems().filter((c) => c.tool === tool.slug && c.status !== "done");
 
   return (
@@ -65,12 +66,14 @@ export default async function ToolPage({ params }: Props) {
       <Container className="grid gap-12 py-12 lg:grid-cols-[1fr_17rem]">
         <article className="min-w-0 max-w-[70ch]">
           <Mdx source={tool.body} />
-          <p className="mt-12 border-t border-line pt-5 text-sm text-muted">
-            Something missing or out of date?{" "}
-            <a href={`${site.repo}/edit/main/content/tools/${tool.slug}.mdx`} className="font-medium text-signal hover:underline">
-              Edit this page on GitHub
-            </a>
-          </p>
+          {edit && (
+            <p className="mt-12 border-t border-line pt-5 text-sm text-muted">
+              Something missing or out of date?{" "}
+              <a href={edit} target="_blank" rel="noreferrer" className="font-medium text-signal hover:underline">
+                Edit this page on GitHub
+              </a>
+            </p>
+          )}
         </article>
 
         <aside className="space-y-8 text-[15px] lg:sticky lg:top-24 lg:self-start">
