@@ -5,6 +5,7 @@ import { forms, type FormId } from "@/lib/contribution-forms";
 import { getContributionTypes } from "@/lib/contribution-templates";
 import { getTools } from "@/lib/content";
 import { passcodeRequired, submissionsEnabled } from "@/lib/github";
+import { askUrl } from "@/lib/repo";
 import { Container } from "@/components/container";
 import { ContributionForm } from "@/components/contribute/form";
 
@@ -26,7 +27,10 @@ export default async function ContributionFormPage({ params }: Props) {
   const def = forms[type as FormId];
   if (!def) notFound();
 
-  const githubFallback = getContributionTypes().find((t) => t.id === def.id)?.primary.href ?? null;
+  const githubFallback =
+    def.id === "ask-a-question"
+      ? askUrl
+      : (getContributionTypes().find((t) => t.id === def.id)?.primary.href ?? null);
 
   return (
     <Container className="py-12 sm:py-16">

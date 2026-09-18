@@ -1,6 +1,6 @@
 import "server-only";
 import { collabSchema, contributorSchema, postSchema, toolSchema } from "./content";
-import { forms, slugify, type FormId } from "./contribution-forms";
+import { forms, slugify, type ContentFormId } from "./contribution-forms";
 
 /** What the API writes to the repository, after validation. */
 export type BuiltFile = { path: string; content: string; title: string; summary: string };
@@ -50,7 +50,7 @@ function validate<T>(schema: { safeParse: (v: unknown) => { success: boolean; da
   }
 }
 
-export function buildFile(type: FormId, values: Record<string, unknown>): BuiltFile {
+export function buildFile(type: ContentFormId, values: Record<string, unknown>): BuiltFile {
   const labels = Object.fromEntries(forms[type].fields.map((f) => [f.name, f.label]));
   const slug = slugify(text(values.slug));
   if (!slug) throw new ValidationError(["Web address: give this a short name using letters and numbers"]);

@@ -28,7 +28,7 @@ People can write a post, add a tool, create a profile, or propose a project usin
 
 Set this up once:
 
-1. Create a **fine-grained personal access token** (GitHub → Settings → Developer settings → Fine-grained tokens). Give it access to this repository only, with **Contents: read and write** and **Pull requests: read and write**.
+1. Create a **fine-grained personal access token** (GitHub → Settings → Developer settings → Fine-grained tokens). Give it access to this repository only, with **Contents: read and write**, **Pull requests: read and write**, and **Issues: read and write**.
 2. In Vercel → Settings → Environment Variables, add `GITHUB_TOKEN` with that value. Keep it secret; it must not start with `NEXT_PUBLIC_`.
 3. Redeploy.
 
@@ -88,6 +88,7 @@ The site is deliberately files-first: no database, no auth, nothing to operate. 
 | --- | --- | --- |
 | Search | Pagefind or Orama (static index) | No server needed; runs at build time. |
 | Comments on posts | Giscus (GitHub Discussions) | Keeps conversations next to the code. |
+| Questions and answers shown on the site | Read the `question` issues with the GitHub API and revalidate hourly | The asking form already exists; this adds a public Q&A page. |
 | Sign-in, so people can edit their own posts and profiles later | Auth.js with GitHub/LinkedIn/Microsoft Entra | Microsoft Entra fits an internal CoE with SSO. The forms already exist; sign-in adds ownership. |
 | Likes, follows, "connect" requests, event RSVPs | Postgres (Neon via Vercel Marketplace) + Drizzle ORM | Move `getContributors()` to the database first. |
 | Editing content without Git | A Git-backed CMS (Keystatic, TinaCMS) | Writers get a UI; content still lands as PRs. |

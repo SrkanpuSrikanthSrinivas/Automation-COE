@@ -2,7 +2,7 @@ import Link from "next/link";
 import { site } from "@/config/site";
 import { Container } from "./container";
 import { Logo } from "./logo";
-import { askLabel, askUrl, issueUrl, repoUrl } from "@/lib/repo";
+import { issueUrl, repoUrl } from "@/lib/repo";
 
 type FooterLink = { href: string | null; label: string };
 
@@ -19,7 +19,7 @@ const groups: { title: string; links: FooterLink[] }[] = [
     links: [
       { href: "/community", label: "Members" },
       { href: "/collaborate", label: "Open projects" },
-      { href: askUrl, label: askLabel },
+      { href: "/contribute/ask-a-question", label: "Ask a question" },
     ],
   },
   {

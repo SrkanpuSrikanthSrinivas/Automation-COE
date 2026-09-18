@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { askLabel, askUrl } from "@/lib/repo";
 import { getContributors } from "@/lib/content";
 import { Container } from "@/components/container";
 import { ButtonLink, PageHeader } from "@/components/ui";
@@ -20,11 +19,9 @@ export default function CommunityPage() {
       >
         <div className="flex flex-wrap gap-3">
           <ButtonLink href={addProfile}>Add your profile</ButtonLink>
-          {askUrl && (
-            <ButtonLink href={askUrl} variant="secondary">
-              {askLabel}
-            </ButtonLink>
-          )}
+          <ButtonLink href="/contribute/ask-a-question" variant="secondary">
+            Ask a question
+          </ButtonLink>
           <ButtonLink href="/contribute" variant="quiet">
             How contributing works
           </ButtonLink>

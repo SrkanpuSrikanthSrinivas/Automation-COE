@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { askLabel, askUrl, editUrl } from "@/lib/repo";
+import { editUrl } from "@/lib/repo";
 import { getContributor, getPost, getPosts, formatDate, type Contributor } from "@/lib/content";
 import { Container } from "@/components/container";
 import { Mdx } from "@/components/mdx";
@@ -70,14 +70,10 @@ export default async function PostPage({ params }: Props) {
             <a href={edit} target="_blank" rel="noreferrer" className="font-medium text-signal hover:underline">
               Suggest an edit on GitHub
             </a>
-            {askUrl && (
-              <>
-                {" "}or{" "}
-                <a href={askUrl} target="_blank" rel="noreferrer" className="font-medium text-signal hover:underline">
-                  {askLabel.toLowerCase()}
-                </a>
-              </>
-            )}
+            {" "}or{" "}
+            <Link href="/contribute/ask-a-question" className="font-medium text-signal hover:underline">
+              ask the author a question
+            </Link>
             .
           </p>
         )}

@@ -6,6 +6,8 @@ Thanks for helping build the CoE.
 
 The rest of this page is for people who would rather work in Git. Most contributions are a single file.
 
+| Have a question first? Ask at `/contribute/ask-a-question`; it reaches maintainers as an issue here.
+
 | I want to… | Create or edit |
 | --- | --- |
 | Write a blog post | `content/blog/<slug>.mdx` |

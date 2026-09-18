@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { askLabel, askUrl, fileUrl, repoUrl } from "@/lib/repo";
+import { fileUrl, repoUrl } from "@/lib/repo";
 import { getContributionTypes } from "@/lib/contribution-templates";
 import { Container } from "@/components/container";
 import { ButtonLink, PageHeader } from "@/components/ui";
@@ -27,16 +27,14 @@ export default function ContributePage() {
         title="Contribute"
         intro="Write a post, showcase a tool, add your profile, or start a project, all from the forms on this site. You don’t need a GitHub account, though you can use one if you prefer."
       >
-        {repoUrl && (
-          <div className="flex flex-wrap gap-3">
-            <ButtonLink href={repoUrl}>Open the repository</ButtonLink>
-            {askUrl && (
-              <ButtonLink href={askUrl} variant="secondary">
-                {askLabel}
-              </ButtonLink>
-            )}
-          </div>
-        )}
+        <div className="flex flex-wrap gap-3">
+          <ButtonLink href="/contribute/ask-a-question">Ask a question</ButtonLink>
+          {repoUrl && (
+            <ButtonLink href={repoUrl} variant="secondary">
+              Open the repository
+            </ButtonLink>
+          )}
+        </div>
       </PageHeader>
 
       <section className="py-14">
@@ -110,6 +108,20 @@ export default function ContributePage() {
             );
           })}
         </div>
+      </section>
+
+      <section className="mb-8 rounded-2xl bg-signal px-8 py-8 text-signal-ink">
+        <h2 className="text-xl font-semibold">Not ready to contribute yet?</h2>
+        <p className="mt-2 max-w-2xl opacity-90">
+          Ask the community anything: whether a tool handles your case, whether an idea is worth writing up, or how to
+          get started. Questions are answered in the open so the next person finds the answer too.
+        </p>
+        <Link
+          href="/contribute/ask-a-question"
+          className="mt-5 inline-flex h-11 items-center rounded-lg bg-signal-ink px-5 font-semibold text-signal hover:opacity-90"
+        >
+          Ask a question
+        </Link>
       </section>
 
       <section className="rounded-2xl border border-line bg-surface p-8">

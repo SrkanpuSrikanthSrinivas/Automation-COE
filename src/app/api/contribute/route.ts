@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { buildFile, ValidationError } from "@/lib/contribution-build";
-import { forms, type FormId } from "@/lib/contribution-forms";
-import { checkPasscode, GitHubError, submissionsEnabled, submitContribution } from "@/lib/github";
+import { forms, type ContentFormId, type FormId } from "@/lib/contribution-forms";
+import { checkPasscode, GitHubError, submissionsEnabled, submitContribution, submitQuestion } from "@/lib/github";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -47,9 +47,35 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Too many submissions just now. Try again in a few minutes." }, { status: 429 });
   }
 
+  const values = payload.values ?? {};
+
   try {
-    const file = buildFile(type, payload.values ?? {});
-    const author = String(payload.values?.authors ?? payload.values?.maintainers ?? payload.values?.lead ?? payload.values?.slug ?? "a visitor");
+    if (type === "ask-a-question") {
+      const subject = String(values.title ?? "").trim();
+      const body = String(values.body ?? "").trim();
+      if (subject.length < 10 || subject.length > 140) {
+        return NextResponse.json(
+          { error: "Please fix these fields.", issues: ["Your question in one line: between 10 and 140 characters"] },
+          { status: 422 },
+        );
+      }
+      if (body.length < 20) {
+        return NextResponse.json(
+          { error: "Please fix these fields.", issues: ["Details: add a sentence or two so people can help"] },
+          { status: 422 },
+        );
+      }
+      const question = await submitQuestion({
+        subject,
+        body: body.slice(0, 8000),
+        author: String(values.author ?? "").trim().slice(0, 80),
+        link: String(values.link ?? "").trim() || undefined,
+      });
+      return NextResponse.json({ url: question.url, mode: "question" });
+    }
+
+    const file = buildFile(type as ContentFormId, values);
+    const author = String(values.authors ?? values.maintainers ?? values.lead ?? values.slug ?? "a visitor");
     const result = await submitContribution({ ...file, author });
     return NextResponse.json({ ...result, path: file.path });
   } catch (error) {

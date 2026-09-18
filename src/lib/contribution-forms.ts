@@ -14,7 +14,10 @@ export type Field = {
   slugOf?: string;
 };
 
-export type FormId = "write-a-post" | "add-a-tool" | "add-your-profile" | "propose-a-project";
+export type FormId = "write-a-post" | "add-a-tool" | "add-your-profile" | "propose-a-project" | "ask-a-question";
+
+/** Types that produce a file in the repository. A question becomes an issue instead. */
+export type ContentFormId = Exclude<FormId, "ask-a-question">;
 
 export type FormDef = {
   id: FormId;
@@ -39,6 +42,32 @@ const slugField = (help: string): Field => ({
 });
 
 export const forms: Record<FormId, FormDef> = {
+  "ask-a-question": {
+    id: "ask-a-question",
+    title: "Ask a question",
+    intro:
+      "Stuck on a tool, unsure whether an idea fits, or want feedback before you write something? Ask here and a maintainer or another member will answer.",
+    submitLabel: "Send question",
+    preview: "article",
+    fields: [
+      {
+        name: "title",
+        label: "Your question in one line",
+        type: "text",
+        required: true,
+        placeholder: "Does Papio Selector work inside iframes?",
+      },
+      {
+        name: "body",
+        label: "Details",
+        type: "markdown",
+        required: true,
+        help: "What you tried, what happened, and which versions you are on. Paste code in ``` fences.",
+      },
+      { name: "author", label: "Your name or handle", type: "text", help: "So we know who to reply to." },
+      { name: "link", label: "Related page", type: "url", help: "A tool page, post, or anything relevant." },
+    ],
+  },
   "write-a-post": {
     id: "write-a-post",
     title: "Write a post",

@@ -81,6 +81,33 @@ export class GitHubError extends Error {
 
 export type SubmitResult = { url: string; mode: "pr" | "direct"; branch?: string };
 
+/**
+ * Questions become issues labelled "question" so maintainers see them in one
+ * place and anyone can answer. The asker never leaves the site.
+ * The token needs "Issues: read and write" for this.
+ */
+export async function submitQuestion(opts: { subject: string; body: string; author: string; link?: string }) {
+  const slug = repoSlug();
+  const body = [
+    opts.body,
+    opts.link ? `\nRelated page: ${opts.link}` : "",
+    `\n— asked from the website by ${opts.author || "an anonymous visitor"}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  if (dryRun || !slug) {
+    console.log(`\n--- dry run: question "${opts.subject}" ---\n${body}\n---\n`);
+    return { url: "https://example.com/dry-run/question" };
+  }
+
+  const issue = await gh<{ html_url: string }>(`/repos/${slug}/issues`, {
+    method: "POST",
+    body: JSON.stringify({ title: opts.subject, body, labels: ["question"] }),
+  });
+  return { url: issue.html_url };
+}
+
 export async function submitContribution(opts: {
   /** Repository-relative path, built on the server from the contribution type and slug. */
   path: string;

@@ -11,7 +11,7 @@ type Status =
   | { state: "editing" }
   | { state: "sending" }
   | { state: "error"; message: string; issues?: string[] }
-  | { state: "done"; url: string; mode: "pr" | "direct" };
+  | { state: "done"; url: string; mode: "pr" | "direct" | "question" };
 
 const inputClass =
   "w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-[15px] text-ink placeholder:text-muted/60 focus:border-signal";
@@ -75,14 +75,17 @@ export function ContributionForm({
   }
 
   if (status.state === "done") {
+    const isQuestion = status.mode === "question";
     return (
       <div className="mx-auto max-w-xl rounded-2xl border border-line bg-surface p-8 text-center">
-        <p className="font-mono text-pass">✓ submitted</p>
+        <p className="font-mono text-pass">{isQuestion ? "✓ sent" : "✓ submitted"}</p>
         <h2 className="h-section mt-3">Thank you</h2>
         <p className="mt-3 text-muted">
-          {status.mode === "direct"
-            ? "Your contribution is saved and will appear on the site in about a minute."
-            : "Your contribution was sent for review. A maintainer will take a look, and it goes live once merged."}
+          {isQuestion
+            ? "Your question is with the community. Answers appear on the thread below, so keep the link if you want to follow it."
+            : status.mode === "direct"
+              ? "Your contribution is saved and will appear on the site in about a minute."
+              : "Your contribution was sent for review. A maintainer will take a look, and it goes live once merged."}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link href="/" className="inline-flex h-11 items-center rounded-lg bg-signal px-5 font-semibold text-signal-ink">
@@ -94,7 +97,7 @@ export function ContributionForm({
             rel="noreferrer"
             className="inline-flex h-11 items-center rounded-lg border border-line px-5 font-semibold"
           >
-            {status.mode === "direct" ? "See the commit" : "Track the review"}
+            {isQuestion ? "Follow the thread" : status.mode === "direct" ? "See the commit" : "Track the review"}
           </a>
         </div>
       </div>
@@ -181,9 +184,9 @@ export function ContributionForm({
         </div>
         {githubFallback && enabled && (
           <p className="text-sm text-muted">
-            Prefer Git?{" "}
+            Prefer GitHub?{" "}
             <a href={githubFallback} target="_blank" rel="noreferrer" className="font-medium text-signal hover:underline">
-              Do it on GitHub instead
+              {def.id === "ask-a-question" ? "Ask there instead" : "Do it on GitHub instead"}
             </a>
             .
           </p>
