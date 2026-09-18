@@ -1,6 +1,10 @@
 # Contributing
 
-Thanks for helping build the CoE. Most contributions are a single file.
+Thanks for helping build the CoE.
+
+**The easiest way is on the website.** Go to `/contribute`, pick what you want to add, fill in the form, and submit. You don't need a GitHub account, and you see a preview as you type.
+
+The rest of this page is for people who would rather work in Git. Most contributions are a single file.
 
 | I want to… | Create or edit |
 | --- | --- |

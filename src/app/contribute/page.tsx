@@ -12,26 +12,11 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  {
-    title: "Pick what to add",
-    body: "Choose a post, tool, profile, or project below and select its GitHub button. The editor opens with a template filled in.",
-  },
-  {
-    title: "Fill in the template",
-    body: "Rename the file, replace the example values, and write your content. Sign in to GitHub if asked.",
-  },
-  {
-    title: "Propose the change",
-    body: "Select “Commit changes”. If you aren’t a member, GitHub creates a fork for you and opens a pull request.",
-  },
-  {
-    title: "Check your preview",
-    body: "Vercel builds a preview of the whole site for your pull request. If a field is wrong, the build log names the file and line.",
-  },
-  {
-    title: "Get a review and merge",
-    body: "A maintainer reviews within a few days. After the merge, the live site updates in about a minute.",
-  },
+  { title: "Pick what to add", body: "A post, a tool, your profile, or a project. Each one has a form on this site." },
+  { title: "Fill in the form", body: "Everything is explained as you go, and a live preview shows how it will look." },
+  { title: "Submit", body: "No GitHub account needed. Your contribution is sent straight from the website." },
+  { title: "A maintainer reviews it", body: "They check it over, usually within a few days, and can suggest changes." },
+  { title: "It goes live", body: "Once accepted, the site updates itself in about a minute." },
 ];
 
 export default function ContributePage() {
@@ -40,7 +25,7 @@ export default function ContributePage() {
     <Container>
       <PageHeader
         title="Contribute"
-        intro="Everything on this site is a file in a public repository. If you have a GitHub account, you can publish a post, showcase a tool, or start a project, all from your browser."
+        intro="Write a post, showcase a tool, add your profile, or start a project, all from the forms on this site. You don’t need a GitHub account, though you can use one if you prefer."
       >
         {repoUrl && (
           <div className="flex flex-wrap gap-3">
@@ -90,10 +75,10 @@ export default function ContributePage() {
                   <h3 className="text-xl font-semibold">{t.title}</h3>
                   <p className="mt-2 text-muted">{t.body}</p>
                   <div className="mt-6 flex flex-wrap items-center gap-3">
-                    {t.primary.href && <ButtonLink href={t.primary.href}>{t.primary.label}</ButtonLink>}
-                    {t.secondary?.href && (
-                      <ButtonLink href={t.secondary.href} variant="secondary">
-                        {t.secondary.label}
+                    <ButtonLink href={`/contribute/${t.id}`}>{t.formLabel}</ButtonLink>
+                    {t.primary.href && (
+                      <ButtonLink href={t.primary.href} variant="secondary">
+                        Use GitHub instead
                       </ButtonLink>
                     )}
                   </div>
@@ -107,19 +92,14 @@ export default function ContributePage() {
                       See an example on GitHub
                     </a>
                   )}
-                  {!repoUrl && (
-                    <p className="mt-4 text-sm text-muted">
-                      Copy the template and add it to <code className="font-mono text-[13px]">{t.folder}/</code> in a
-                      pull request.
-                    </p>
-                  )}
+                  <p className="mt-4 text-sm text-muted">
+                    Saved as <code className="font-mono text-[13px]">{t.folder}/{t.filename}</code>
+                  </p>
                 </div>
 
                 <figure className="overflow-hidden rounded-xl bg-code-bg text-code-ink">
                   <figcaption className="flex items-center justify-between gap-3 border-b border-white/10 py-2 pl-5 pr-2 font-mono text-[12.5px] text-code-ink/60">
-                    <span className="truncate">
-                      {t.folder}/{t.filename}
-                    </span>
+                    <span className="truncate">What the form saves</span>
                     <CopyButton text={t.template} label="Copy template" />
                   </figcaption>
                   <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">

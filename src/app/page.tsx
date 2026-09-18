@@ -157,7 +157,7 @@ export default function HomePage() {
             <div className="flex-1">
               <h2 className="text-2xl font-semibold tracking-tight">Find people who test the way you do</h2>
               <p className="mt-1 opacity-85">
-                Add a profile with one JSON file and connect with mentors, reviewers, and co-authors.
+                Add your profile in a minute and connect with mentors, reviewers, and co-authors.
               </p>
             </div>
             <Link

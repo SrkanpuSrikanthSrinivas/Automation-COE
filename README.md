@@ -22,6 +22,29 @@ npm run validate   # typecheck + production build, the same check CI runs
 
 All GitHub links on the site (Contribute buttons, "Edit on GitHub", "Ask a question") are built from the repository Vercel is connected to, so nothing needs editing. If the site stops showing GitHub buttons, Vercel couldn't identify the repository; set `NEXT_PUBLIC_REPO_URL`.
 
+## Contributing from the website
+
+People can write a post, add a tool, create a profile, or propose a project using forms at `/contribute/...`, with a live preview and no GitHub account. Submissions go to `/api/contribute`, which validates them with the same schemas the build uses and then writes the file to the repository on the site's behalf.
+
+Set this up once:
+
+1. Create a **fine-grained personal access token** (GitHub → Settings → Developer settings → Fine-grained tokens). Give it access to this repository only, with **Contents: read and write** and **Pull requests: read and write**.
+2. In Vercel → Settings → Environment Variables, add `GITHUB_TOKEN` with that value. Keep it secret; it must not start with `NEXT_PUBLIC_`.
+3. Redeploy.
+
+Until the token is set, the forms explain that submitting isn't switched on yet and offer the GitHub route instead.
+
+### Review or publish immediately
+
+`CONTRIBUTE_MODE` decides what a submission does:
+
+- **`pr` (default).** Each submission becomes a branch and a pull request for you to review, with a Vercel preview attached. Nothing reaches the live site until you merge.
+- **`direct`.** The file is committed to the default branch and appears on the site within about a minute. This requires `CONTRIBUTE_PASSCODE`, since anyone who can open the page could otherwise publish.
+
+`CONTRIBUTE_PASSCODE` adds a shared word contributors must enter. Recommended for an internal CoE, and required for `direct` mode. The API also limits each visitor to five submissions per ten minutes and rejects bot submissions that fill the hidden honeypot field.
+
+To try the forms without touching GitHub, run locally with `CONTRIBUTE_DRY_RUN=true`; submissions are printed to the terminal instead.
+
 ### Environment variables (all optional)
 
 | Variable | Example | When to set it |
@@ -31,6 +54,10 @@ All GitHub links on the site (Contribute buttons, "Edit on GitHub", "Ask a quest
 | `NEXT_PUBLIC_REPO_BRANCH` | `main` | Your default branch isn't `main`. |
 | `NEXT_PUBLIC_REPO_DIR` | `website` | The site lives in a subfolder of the repository. |
 | `NEXT_PUBLIC_DISCUSSIONS` | `true` | After turning on GitHub Discussions (repo **Settings → General → Features**). Until then, "Ask a question" opens a Question issue. |
+| `GITHUB_TOKEN` | secret | Enables the contribution forms. See above. Never prefix with `NEXT_PUBLIC_`. |
+| `GITHUB_REPO` | `owner/repo` | Only if Vercel can't detect the repository. |
+| `CONTRIBUTE_MODE` | `pr` or `direct` | `pr` is the default and is what you want while the community is new. |
+| `CONTRIBUTE_PASSCODE` | a shared word | Gate submissions. Required for `direct` mode. |
 
 Redeploy after changing any of these; they are read at build time.
 
@@ -61,7 +88,7 @@ The site is deliberately files-first: no database, no auth, nothing to operate. 
 | --- | --- | --- |
 | Search | Pagefind or Orama (static index) | No server needed; runs at build time. |
 | Comments on posts | Giscus (GitHub Discussions) | Keeps conversations next to the code. |
-| Sign-in and self-serve profiles | Auth.js with GitHub/LinkedIn/Microsoft Entra | Microsoft Entra fits an internal CoE with SSO. |
+| Sign-in, so people can edit their own posts and profiles later | Auth.js with GitHub/LinkedIn/Microsoft Entra | Microsoft Entra fits an internal CoE with SSO. The forms already exist; sign-in adds ownership. |
 | Likes, follows, "connect" requests, event RSVPs | Postgres (Neon via Vercel Marketplace) + Drizzle ORM | Move `getContributors()` to the database first. |
 | Editing content without Git | A Git-backed CMS (Keystatic, TinaCMS) | Writers get a UI; content still lands as PRs. |
 | Tool usage stats | GitHub and npm APIs with Next.js `revalidate` | Refresh hourly with incremental static regeneration. |

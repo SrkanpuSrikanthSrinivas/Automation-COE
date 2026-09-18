@@ -89,7 +89,7 @@ export function Directory({ people, addProfileHref }: { people: Contributor[]; a
             className="flex h-full min-h-48 flex-col justify-center rounded-xl border border-dashed border-line p-5 text-center hover:border-signal"
           >
             <span className="font-semibold">Add your profile</span>
-            <span className="mt-1 text-sm text-muted">Opens a ready-made profile file on GitHub.</span>
+            <span className="mt-1 text-sm text-muted">Fill in a short form, no GitHub needed.</span>
           </Link>
         </li>
       </ul>

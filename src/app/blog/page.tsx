@@ -3,7 +3,6 @@ import Link from "next/link";
 import { getContributor, getPosts, formatDate, type Contributor } from "@/lib/content";
 import { Container } from "@/components/container";
 import { ButtonLink, EmptyState, PageHeader, Tag } from "@/components/ui";
-import { getContribution } from "@/lib/contribution-templates";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -12,16 +11,15 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getPosts();
-  const write = getContribution("write-a-post");
   const tags = [...new Set(posts.flatMap((p) => p.tags))].sort();
 
   return (
     <Container>
       <PageHeader title="Blog" intro="Guides and field notes from people doing test automation every day.">
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href={write.primary.href ?? "/contribute#write-a-post"}>Write a post</ButtonLink>
-          <ButtonLink href="/contribute#write-a-post" variant="quiet">
-            How posting works
+          <ButtonLink href="/contribute/write-a-post">Write a post</ButtonLink>
+          <ButtonLink href="/contribute" variant="quiet">
+            How contributing works
           </ButtonLink>
         </div>
       </PageHeader>
@@ -29,7 +27,7 @@ export default function BlogPage() {
       {posts.length === 0 ? (
         <div className="py-12">
           <EmptyState title="No posts yet">
-            Be the first to write one. <Link href="/contribute#write-a-post" className="text-signal">Here is how</Link>.
+            Be the first to write one. <Link href="/contribute/write-a-post" className="text-signal">Start writing</Link>.
           </EmptyState>
         </div>
       ) : (
